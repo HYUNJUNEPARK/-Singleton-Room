@@ -1,21 +1,19 @@
 package com.example.room
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room.databinding.ActivityMainBinding
-import com.example.room.db.DBProvider
 import com.example.room.db.Memo
-import com.example.room.db.MemoDatabase
+import com.example.room.db.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private lateinit var db: MemoDatabase
+    private lateinit var db: AppDatabase
     private lateinit var adapter: Adapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         try {
-            db = DBProvider.getInstance(this)!!
+            db = AppDatabase.getInstance(this)!!
             initAdapter()
         }
         catch (e: Exception) {
@@ -45,8 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     fun updateButtonClicked(v: View) {
         if (binding.editMemo.text.isNotEmpty()) {
-
-
             val memo = Memo(
                 null,
                 content = binding.editMemo.text.toString(),

@@ -26,27 +26,27 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
         lateinit var memo: Memo
 
         init {
-            binding.buttonDelete.setOnClickListener {
+            binding.deleteButton.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     memoDao?.delete(memo)
                 }
                 memoList.remove(memo)
                 notifyDataSetChanged()
             }
-            binding.buttonUpdate.setOnClickListener {
-                if(binding.buttonUpdate.text == "수정"){
+            binding.modifyButton.setOnClickListener {
+                if(binding.modifyButton.text == "수정"){
                     binding.textEditor.visibility = View.VISIBLE
-                    binding.buttonUpdate.text = "저장"
-                    binding.buttonUpdate.setTextColor(Color.RED)
+                    binding.modifyButton.text = "저장"
+                    binding.modifyButton.setTextColor(Color.RED)
                     binding.textEditor.setText("${memo?.content}")
                 } else {
                     binding.textEditor.visibility = View.INVISIBLE
-                    binding.buttonUpdate.text = "수정"
-                    binding.buttonUpdate.setTextColor(Color.WHITE)
+                    binding.modifyButton.text = "수정"
+                    binding.modifyButton.setTextColor(Color.WHITE)
 
                     val content = binding.textEditor.text.toString()
                     val datetime = System.currentTimeMillis()
-                    val memo = Memo(memo.no, content, datetime)
+                    val memo = Memo(memo.idx, content, datetime)
 
                     CoroutineScope(Dispatchers.IO).launch {
                         memoDao?.update(memo)
@@ -65,7 +65,7 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
 
         fun setContents(memo: Memo) {
             this.memo = memo
-            binding.textNo.text = "${memo.no}"
+            binding.textIdx.text = "${memo.idx}"
             binding.textContent.text = memo.content
             val sdf = SimpleDateFormat("yyyy/MM/dd hh:mm")
             binding.textDatetime.text = "${sdf.format(memo.datetime)}"
