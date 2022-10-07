@@ -4,6 +4,8 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
 import com.example.room.db.MemoDao
@@ -13,8 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
-class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
-    var memoList = mutableListOf<Memo>()
+class Adapter: ListAdapter<Memo, Adapter.MyHolder>(diffUtil) {
+    //var memoList = mutableListOf<Memo>()
     var memoDao: MemoDao ?= null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -30,7 +32,8 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
                 CoroutineScope(Dispatchers.IO).launch {
                     memoDao?.delete(memo)
                 }
-                memoList.remove(memo)
+                //currentList.
+                //memoList.remove(memo)
                 notifyDataSetChanged()
             }
             binding.modifyButton.setOnClickListener {
@@ -52,10 +55,10 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
                         memoDao?.update(memo)
                     }
 
-                    memoList.clear()
+                    //memoList.clear()
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        memoList.addAll(memoDao?.getAll()?: listOf())
+                        //memoList.addAll(memoDao?.getAll()?: listOf())
                     }
 
                     notifyDataSetChanged()
@@ -63,7 +66,7 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
             }
         }
 
-        fun setContents(memo: Memo) {
+        fun bind(memo: Memo) {
             this.memo = memo
             binding.textIdx.text = "${memo.idx}"
             binding.textContent.text = memo.content
@@ -73,11 +76,18 @@ class Adapter: RecyclerView.Adapter<Adapter.MyHolder>() {
     }
 
     override fun onBindViewHolder(myHolder: MyHolder, position: Int) {
-        val memo = memoList[position]
-        myHolder.setContents(memo)
+        //val memo = memoList[position]
+        myHolder.bind(currentList[position])
     }
 
-    override fun getItemCount(): Int {
-        return memoList.size
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<Memo>() {
+            override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean {
+                return oldItem.idx == newItem.idx
+            }
+            override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }
