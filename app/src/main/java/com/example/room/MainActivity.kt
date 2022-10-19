@@ -2,8 +2,6 @@ package com.example.room
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,11 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    //private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var db: AppDatabase
     private lateinit var memoAdapter: MemoAdapter
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -20,6 +20,7 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.recyclerViewItem = this
         return ViewHolder(binding)
     }
 
