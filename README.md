@@ -13,7 +13,11 @@
 ---
 ><a id = "content1">**1. Room**</a></br>
 
-
+```kotlin
+private lateinit var db: MemoDatabase
+//...
+db = DBProvider.getInstance(this)!!
+```
 
 -ORM(Object Relational Mapping) 라이브러리 : 객체(class)와 RDB 를 매핑하고 변환하는 기술</br>
 -SQLite 에서는 쿼리문을 알아야했던것과 달리 ORM 라이브러리인 Room 을 사용하면 쿼리를 몰라도 코드만으로 DB 컨트롤 가능</br>
@@ -29,10 +33,15 @@ plugin {
 
 
 dependencies {
+    //Room
     def roomVersion = "2.4.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
+    
+     //Coroutine
+     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
+     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 }
 ```
 <br></br>

@@ -1,6 +1,7 @@
 package com.example.room
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
-class Adapter: ListAdapter<Memo, Adapter.MyHolder>(diffUtil) {
-    //var memoList = mutableListOf<Memo>()
-    var memoDao: MemoDao ?= null
+class MemoAdapter: ListAdapter<Memo, MemoAdapter.MyHolder>(diffUtil) {
+    lateinit var memoDao: MemoDao
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,15 +29,19 @@ class Adapter: ListAdapter<Memo, Adapter.MyHolder>(diffUtil) {
 
         init {
             binding.deleteButton.setOnClickListener {
+                //DB 에서 item 삭제
                 CoroutineScope(Dispatchers.IO).launch {
                     memoDao?.delete(memo)
                 }
-                //currentList.
-                //memoList.remove(memo)
-                notifyDataSetChanged()
+                //currentList 에서 item 삭제 후 갱신
+                currentList.toMutableList().apply {
+                    this.remove(memo)
+                    submitList(this)
+                }
             }
+
             binding.modifyButton.setOnClickListener {
-                if(binding.modifyButton.text == "수정"){
+                if(binding.modifyButton.text == "수정") {
                     binding.textEditor.visibility = View.VISIBLE
                     binding.modifyButton.text = "저장"
                     binding.modifyButton.setTextColor(Color.RED)
@@ -47,21 +51,21 @@ class Adapter: ListAdapter<Memo, Adapter.MyHolder>(diffUtil) {
                     binding.modifyButton.text = "수정"
                     binding.modifyButton.setTextColor(Color.WHITE)
 
-                    val content = binding.textEditor.text.toString()
-                    val datetime = System.currentTimeMillis()
-                    val memo = Memo(memo.idx, content, datetime)
-
+                    val newMemo = Memo(
+                        idx = memo.idx,
+                        content = binding.textEditor.text.toString(),
+                        datetime = System.currentTimeMillis()
+                    )
+                    //DB 에 수정 사항 갱신
                     CoroutineScope(Dispatchers.IO).launch {
-                        memoDao?.update(memo)
+                        memoDao.update(newMemo)
                     }
-
-                    //memoList.clear()
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        //memoList.addAll(memoDao?.getAll()?: listOf())
+                    //currentList 갱신
+                    val memoList = currentList.toMutableList().apply {
+                        this.removeAt(memo.idx)
+                        this.add(memo.idx, newMemo)
                     }
-
-                    notifyDataSetChanged()
+                    submitList(memoList)
                 }
             }
         }
@@ -76,7 +80,6 @@ class Adapter: ListAdapter<Memo, Adapter.MyHolder>(diffUtil) {
     }
 
     override fun onBindViewHolder(myHolder: MyHolder, position: Int) {
-        //val memo = memoList[position]
         myHolder.bind(currentList[position])
     }
 
