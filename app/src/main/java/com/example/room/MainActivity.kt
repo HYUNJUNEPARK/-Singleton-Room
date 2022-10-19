@@ -6,23 +6,25 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room.databinding.ActivityMainBinding
-import com.example.room.db.Memo
 import com.example.room.db.AppDatabase
+import com.example.room.db.Memo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    //private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var binding: ActivityMainBinding
+
     private lateinit var db: AppDatabase
     private lateinit var memoAdapter: MemoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         try {
             db = AppDatabase.getInstance(this)!!
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             memoAdapter.memoDao = db.memoDao()
             binding.recyclerView.adapter = memoAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
+            binding.mainActivity = this
 
             getDatabaseData(this)
         } catch (e: Exception) {
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updateButtonClicked(v: View) {
+    fun onUpdate() {
         if (binding.editMemo.text.isNotEmpty()) {
             try {
                 val memo = Memo(
@@ -67,9 +70,7 @@ class MainActivity : AppCompatActivity() {
                 val memoList = memoAdapter.currentList.toMutableList().apply {
                     this.add(memo)
                 }
-
                 memoAdapter.submitList(memoList)
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
