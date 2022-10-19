@@ -31,7 +31,6 @@ plugin {
     id 'kotlin-kapt' //어노테이션 프로세싱을 코틀린에서 사용 가능하게 해줌
 }
 
-
 dependencies {
     //Room
     def roomVersion = "2.4.2"
