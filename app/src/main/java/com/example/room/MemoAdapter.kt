@@ -1,7 +1,6 @@
 package com.example.room
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,29 +8,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
-import com.example.room.db.MemoDao
 import com.example.room.db.Memo
+import com.example.room.db.MemoDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
-class MemoAdapter: ListAdapter<Memo, MemoAdapter.MyHolder>(diffUtil) {
+class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
     lateinit var memoDao: MemoDao
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyHolder(binding)
+        return ViewHolder(binding)
     }
 
-    inner class MyHolder(private val binding: ItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
         lateinit var memo: Memo
 
         init {
             binding.deleteButton.setOnClickListener {
                 //DB 에서 item 삭제
                 CoroutineScope(Dispatchers.IO).launch {
-                    memoDao?.delete(memo)
+                    memoDao.delete(memo)
                 }
                 //currentList 에서 item 삭제 후 갱신
                 currentList.toMutableList().apply {
@@ -45,7 +44,7 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.MyHolder>(diffUtil) {
                     binding.textEditor.visibility = View.VISIBLE
                     binding.modifyButton.text = "저장"
                     binding.modifyButton.setTextColor(Color.RED)
-                    binding.textEditor.setText("${memo?.content}")
+                    binding.textEditor.setText("${memo.content}")
                 } else {
                     binding.textEditor.visibility = View.INVISIBLE
                     binding.modifyButton.text = "수정"
@@ -79,8 +78,8 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.MyHolder>(diffUtil) {
         }
     }
 
-    override fun onBindViewHolder(myHolder: MyHolder, position: Int) {
-        myHolder.bind(currentList[position])
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(currentList[position])
     }
 
     companion object {
