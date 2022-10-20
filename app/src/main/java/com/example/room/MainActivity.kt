@@ -1,9 +1,6 @@
 package com.example.room
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,9 +9,6 @@ import com.example.room.databinding.ActivityMainBinding
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
 import com.example.room.vm.MemoViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -51,15 +45,7 @@ class MainActivity : AppCompatActivity() {
                     content = binding.editMemo.text.toString(),
                     datetime = System.currentTimeMillis()
                 )
-                //DB에 item 추가
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.memoDao().insert(memo)
-                }
-                //currentList 갱신
-                val memoList = memoAdapter.currentList.toMutableList().apply {
-                    this.add(memo)
-                }
-                memoAdapter.submitList(memoList)
+                viewModel.updateData(this, memo)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
