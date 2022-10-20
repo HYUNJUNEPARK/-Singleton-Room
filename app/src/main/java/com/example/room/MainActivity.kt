@@ -9,6 +9,7 @@ import com.example.room.databinding.ActivityMainBinding
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
 import com.example.room.vm.MemoViewModel
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             db = AppDatabase.getInstance(this)!!
-            memoAdapter = MemoAdapter()
+            memoAdapter = MemoAdapter(this)
             memoAdapter.memoDao = db.memoDao()
             binding.recyclerView.adapter = memoAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -37,15 +38,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onUpdate() {
+    fun onInsert() {
         if (binding.editMemo.text.isNotEmpty()) {
             try {
+                val itemId = System.currentTimeMillis().apply {
+                    val sdf = SimpleDateFormat("yyMMddhhmm")
+                    sdf.format(this)
+                }
                 val memo = Memo(
-                    idx = memoAdapter.currentList.size,
+                    id = itemId,
                     content = binding.editMemo.text.toString(),
                     datetime = System.currentTimeMillis()
                 )
-                viewModel.updateData(this, memo)
+                viewModel.insertData(this, memo)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

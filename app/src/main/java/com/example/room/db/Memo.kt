@@ -12,7 +12,7 @@ no | content | dateTime
 @Entity(tableName = DB_NAME)
 data class Memo(
     @PrimaryKey
-    var idx: Int,
+    var id: Long,
 
     @ColumnInfo
     var content: String,

@@ -1,22 +1,27 @@
 package com.example.room
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
 import com.example.room.db.Memo
 import com.example.room.db.MemoDao
+import com.example.room.vm.MemoViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
-class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
+class MemoAdapter(val context: Context): ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
     lateinit var memoDao: MemoDao
+    private val viewModel: MemoViewModel by (context as ComponentActivity).viewModels()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,15 +34,7 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
 
         init {
             binding.deleteButton.setOnClickListener {
-                //DB 에서 item 삭제
-                CoroutineScope(Dispatchers.IO).launch {
-                    memoDao.delete(memo)
-                }
-                //currentList 에서 item 삭제 후 갱신
-                currentList.toMutableList().apply {
-                    this.remove(memo)
-                    submitList(this)
-                }
+                viewModel.deleteData(context, memo)
             }
 
             binding.modifyButton.setOnClickListener {
@@ -52,27 +49,29 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
                     binding.modifyButton.setTextColor(Color.WHITE)
 
                     val newMemo = Memo(
-                        idx = memo.idx,
+                        id = memo.id,
                         content = binding.textEditor.text.toString(),
                         datetime = System.currentTimeMillis()
                     )
+
+                    //TODO MemoViewModel 53-
                     //DB 에 수정 사항 갱신
-                    CoroutineScope(Dispatchers.IO).launch {
-                        memoDao.update(newMemo)
-                    }
+//                    CoroutineScope(Dispatchers.IO).launch {
+//                        memoDao.update(newMemo)
+//                    }
                     //currentList 갱신
-                    val memoList = currentList.toMutableList().apply {
+/*                    val memoList = currentList.toMutableList().apply {
                         this.removeAt(memo.idx)
                         this.add(memo.idx, newMemo)
-                    }
-                    submitList(memoList)
+                    }*/
+                    //submitList(memoList)
                 }
             }
         }
 
         fun bind(memo: Memo) {
             this.memo = memo
-            binding.textIdx.text = "${memo.idx}"
+            binding.textIdx.text = "${memo.id}"
             binding.textContent.text = memo.content
             val sdf = SimpleDateFormat("yyyy/MM/dd hh:mm")
             binding.textDatetime.text = "${sdf.format(memo.datetime)}"
@@ -86,7 +85,7 @@ class MemoAdapter: ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<Memo>() {
             override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean {
-                return oldItem.idx == newItem.idx
+                return oldItem.id == newItem.id
             }
             override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean {
                 return oldItem == newItem
