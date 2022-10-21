@@ -2,7 +2,6 @@ package com.example.room.vm
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -42,7 +41,7 @@ class MemoViewModel : ViewModel() {
                 db!!.memoDao().insert(memo)
             }
             val newMemoList = _memoList.value!!.toMutableList().apply {
-                this!!.add(memo)
+                this.add(memo)
             }
             _memoList.value = newMemoList
         } catch (e: Exception) {
@@ -50,38 +49,28 @@ class MemoViewModel : ViewModel() {
         }
     }
 
-    //modify
     @RequiresApi(Build.VERSION_CODES.N)
-    fun updateData(context: Context, memo: Memo) {
+    fun updateData(context: Context, newMemo: Memo, idx: Int) {
         try {
             ioScope.launch {
                 val db = AppDatabase.getInstance(context)
-                db!!.memoDao().update(memo)
+                db!!.memoDao().update(newMemo)
             }
-
-            //TODO 삭제할 아이템의 인덱스를 알아 낸 뒤 1,2 실행
-            //TODO idx 가 어려울 경우 다른 교체방법이 있는지 알아봐야함
-            //TODO MemoAdapter 54-
             val newMemoList = _memoList.value!!.toMutableList().apply {
-
-                //1 remove Item
-
-
-                //2 add Item
-
-
+                this.removeAt(idx)
+                this.add(idx, newMemo)
             }
+            _memoList.value = newMemoList
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    //delete
     fun deleteData(context: Context, memo: Memo) {
         try {
             ioScope.launch {
                 val db = AppDatabase.getInstance(context)
-                db!!.memoDao().update(memo)
+                db!!.memoDao().delete(memo)
             }
             val newMemoList = _memoList.value!!.toMutableList().apply {
                 this.remove(memo)
