@@ -144,3 +144,7 @@ https://developer.android.com/jetpack/androidx/releases/room</br>
 
 Migration 클래스</br>
 https://developer.android.com/training/data-storage/room/migrating-db-versions?hl=ko</br>
+
+
+Room Database 튜토리얼 + MVVM + Repository(with kotlin)
+https://thkim-study.tistory.com/15

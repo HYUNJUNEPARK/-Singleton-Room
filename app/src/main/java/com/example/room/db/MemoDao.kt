@@ -11,7 +11,7 @@ interface MemoDao {
     @Query("SELECT * FROM $DB_NAME")
     fun getAll(): List<Memo>
 
-    @Query("SELECT content FROM $DB_NAME WHERE idx = :no")
+    @Query("SELECT content FROM $DB_NAME WHERE id = :no")
     fun getMemo(no:Int): String
 
     @Update

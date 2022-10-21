@@ -21,8 +21,7 @@ abstract class AppDatabase: RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         DB_NAME
-                    )
-                        .build()
+                    ).build()
                 }
             }
             return instance
