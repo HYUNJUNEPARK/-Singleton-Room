@@ -1,26 +1,21 @@
 package com.example.room
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room.databinding.ActivityMainBinding
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.room.vm.MemoViewModel
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
-    //private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var db: AppDatabase
     private lateinit var memoAdapter: MemoAdapter
+    private lateinit var db: AppDatabase
+    private val viewModel: MemoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,49 +23,34 @@ class MainActivity : AppCompatActivity() {
 
         try {
             db = AppDatabase.getInstance(this)!!
-            memoAdapter = MemoAdapter()
+            memoAdapter = MemoAdapter(this)
             memoAdapter.memoDao = db.memoDao()
             binding.recyclerView.adapter = memoAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
             binding.mainActivity = this
 
-            getDatabaseData(this)
+            viewModel.getDbData(this)
+            viewModel.memoList.observe(this) {
+                memoAdapter.submitList(it)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun getDatabaseData(context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
-            db.memoDao().getAll().let { memoList ->
-                if (memoList.isNullOrEmpty()) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(context, "Empty DB", Toast.LENGTH_SHORT).show()
-                    }
-                    return@launch
-                }
-                memoAdapter.submitList(memoList)
-            }
-        }
-    }
-
-    fun onUpdate() {
+    fun onInsert() {
         if (binding.editMemo.text.isNotEmpty()) {
             try {
+                val itemId = System.currentTimeMillis().apply {
+                    val sdf = SimpleDateFormat("yyMMddhhmm")
+                    sdf.format(this)
+                }
                 val memo = Memo(
-                    idx = memoAdapter.currentList.size,
+                    id = itemId,
                     content = binding.editMemo.text.toString(),
                     datetime = System.currentTimeMillis()
                 )
-                //DB에 item 추가
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.memoDao().insert(memo)
-                }
-                //currentList 갱신
-                val memoList = memoAdapter.currentList.toMutableList().apply {
-                    this.add(memo)
-                }
-                memoAdapter.submitList(memoList)
+                viewModel.insertData(this, memo)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
