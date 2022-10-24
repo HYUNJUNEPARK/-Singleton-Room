@@ -41,16 +41,16 @@ class MainActivity : AppCompatActivity() {
     fun onInsert() {
         if (binding.editMemo.text.isNotEmpty()) {
             try {
-                val itemId = System.currentTimeMillis().apply {
-                    val sdf = SimpleDateFormat("yyMMddhhmm")
-                    sdf.format(this)
-                }
-                val memo = Memo(
-                    id = itemId,
-                    content = binding.editMemo.text.toString(),
-                    datetime = System.currentTimeMillis()
-                )
-                viewModel.insertData(this, memo)
+                viewModel.insertData(
+                    this,
+                    memo = Memo(
+                        id = System.currentTimeMillis().apply {
+                            val sdf = SimpleDateFormat("yyMMddhhmm")
+                            sdf.format(this)
+                        },
+                        content = binding.editMemo.text.toString(),
+                        datetime = System.currentTimeMillis()
+                    ))
             } catch (e: Exception) {
                 e.printStackTrace()
             }

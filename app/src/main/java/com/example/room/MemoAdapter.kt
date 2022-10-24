@@ -51,12 +51,15 @@ class MemoAdapter(val context: Context): ListAdapter<Memo, MemoAdapter.ViewHolde
                     binding.modifyButton.text = "수정"
                     binding.modifyButton.setTextColor(Color.WHITE)
 
-                    val newMemo = Memo(
-                        id = memo.id,
-                        content = binding.textEditor.text.toString(),
-                        datetime = System.currentTimeMillis()
+                    viewModel.updateData(
+                        context = context,
+                        newMemo = Memo(
+                            id = memo.id,
+                            content = binding.textEditor.text.toString(),
+                            datetime = System.currentTimeMillis()
+                        ),
+                        idx = idx!!
                     )
-                    viewModel.updateData(context, newMemo, idx!!)
                 }
             }
         }
