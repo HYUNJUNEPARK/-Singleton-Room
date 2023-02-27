@@ -6,8 +6,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.room.databinding.ActivityMainBinding
-import com.module.appdatabase.AppDatabase
-import com.module.appdatabase.Memo
+import com.module.databasemanager.AppDatabase
+import com.module.databasemanager.Memo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
