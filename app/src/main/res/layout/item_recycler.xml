@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="recyclerViewItem"
-            type="com.example.room.MemoAdapter" />
+<!--        <variable-->
+<!--            name="recyclerViewItem"-->
+<!--            type="com.example.room.MemoAdapter" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

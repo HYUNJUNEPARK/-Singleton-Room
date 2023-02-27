@@ -26,7 +26,7 @@ class MemoAdapter(val context: Context): ListAdapter<_Memo, MemoAdapter.ViewHold
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.recyclerViewItem = this
+        //binding.recyclerViewItem = this
         return ViewHolder(binding)
     }
 
