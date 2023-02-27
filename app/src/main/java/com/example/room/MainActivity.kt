@@ -3,17 +3,20 @@ package com.example.room
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.room.databinding.ActivityMainBinding
 import com.module.databasemanager.AppDatabase
 import com.module.databasemanager.Memo
+import com.module.databasemanager.MemoViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val memoViewModel: MemoViewModel by viewModels()
 //    private lateinit var memoAdapter: MemoAdapter
 //    private lateinit var db: _AppDatabase
 //    private val viewModel: _MemoViewModel by viewModels()
@@ -46,13 +49,14 @@ class MainActivity : AppCompatActivity() {
     fun onInsert(v: View) {
         Log.d("testLog", "onInsert: aaaaaa")
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val memo = Memo(
-                id =111,
-                content =  "asdfasdf"
-            )
-            appDatabase.memoDao().insert(memo)
-        }
+        Log.d("testLog", "memoViewModel.memoList: ${memoViewModel.memoList.value}")
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val memo = Memo(
+//                id =111,
+//                content =  "asdfasdf"
+//            )
+//            appDatabase.memoDao().insert(memo)
+//        }
 
 //        if (binding.editMemo.text.isNotEmpty()) {
 //            try {
@@ -75,14 +79,16 @@ class MainActivity : AppCompatActivity() {
     fun onGetData(v: View) {
         Log.d("testLog", "onInsert: bbbbb")
 
-        CoroutineScope(Dispatchers.IO).launch {
-//            val memo = Memo(111)
-//            appDatabase.memoDao().insert(memo)
-            appDatabase.memoDao().getAll().let {
-                Log.d("testLog", "onGetData: $it")
-            }
+//        CoroutineScope(Dispatchers.IO).launch {
+////            val memo = Memo(111)
+////            appDatabase.memoDao().insert(memo)
+//            appDatabase.memoDao().getAll().let {
+//                Log.d("testLog", "onGetData: $it")
+//            }
+
+        memoViewModel.getDbData(applicationContext)
+
 
         }
     }
 
-}
