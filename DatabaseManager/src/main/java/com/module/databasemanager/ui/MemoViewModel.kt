@@ -1,9 +1,11 @@
-package com.module.databasemanager
+package com.module.databasemanager.ui
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.module.databasemanager.data.AppDatabase
+import com.module.databasemanager.data.Memo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

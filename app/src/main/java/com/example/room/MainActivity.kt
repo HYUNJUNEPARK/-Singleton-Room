@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room.databinding.ActivityMainBinding
-import com.module.databasemanager.AppDatabase
-import com.module.databasemanager.Memo
-import com.module.databasemanager.MemoViewModel
+import com.module.databasemanager.data.AppDatabase
+import com.module.databasemanager.data.Memo
+import com.module.databasemanager.ui.MemoViewModel
 import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {

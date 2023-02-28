@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
-import com.module.databasemanager.Memo
-import com.module.databasemanager.MemoDao
-import com.module.databasemanager.MemoViewModel
+import com.module.databasemanager.data.Memo
+import com.module.databasemanager.data.MemoDao
+import com.module.databasemanager.ui.MemoViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,7 +68,6 @@ class MemoAdapter(val context: Context): ListAdapter<Memo, MemoAdapter.ViewHolde
             binding.textDatetime.text = sdf.format(memo.datetime)
         }
     }
-
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(currentList[position], position)
