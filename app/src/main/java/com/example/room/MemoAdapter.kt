@@ -2,37 +2,32 @@ package com.example.room
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
-import com.example.room.db._Memo
-import com.example.room.db._MemoDao
-import com.example.room.vm._MemoViewModel
+import com.module.databasemanager.Memo
+import com.module.databasemanager.MemoDao
+import com.module.databasemanager.MemoViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MemoAdapter(val context: Context): ListAdapter<_Memo, MemoAdapter.ViewHolder>(diffUtil) {
-    lateinit var memoDao: _MemoDao
-    private val viewModel: _MemoViewModel by (context as ComponentActivity).viewModels()
+class MemoAdapter(val context: Context): ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
+    private val viewModel: MemoViewModel by (context as ComponentActivity).viewModels()
+    lateinit var memoDao: MemoDao
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        //binding.recyclerViewItem = this
         return ViewHolder(binding)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     inner class ViewHolder(private val binding: ItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
-        private lateinit var memo: _Memo
+        private lateinit var memo: Memo
         private var idx: Int? = null
 
         init {
@@ -53,7 +48,7 @@ class MemoAdapter(val context: Context): ListAdapter<_Memo, MemoAdapter.ViewHold
 
                     viewModel.updateData(
                         context = context,
-                        newMemo = _Memo(
+                        newMemo = Memo(
                             id = memo.id,
                             content = binding.textEditor.text.toString(),
                             datetime = System.currentTimeMillis()
@@ -64,7 +59,7 @@ class MemoAdapter(val context: Context): ListAdapter<_Memo, MemoAdapter.ViewHold
             }
         }
 
-        fun bind(memo: _Memo, idx: Int) {
+        fun bind(memo: Memo, idx: Int) {
             this.memo = memo
             this.idx = idx
             binding.textIdx.text = "${memo.id}"
@@ -74,17 +69,17 @@ class MemoAdapter(val context: Context): ListAdapter<_Memo, MemoAdapter.ViewHold
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(currentList[position], position)
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<_Memo>() {
-            override fun areItemsTheSame(oldItem: _Memo, newItem: _Memo): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<Memo>() {
+            override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean {
                 return oldItem.id == newItem.id
             }
-            override fun areContentsTheSame(oldItem: _Memo, newItem: _Memo): Boolean {
+            override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean {
                 return oldItem == newItem
             }
         }

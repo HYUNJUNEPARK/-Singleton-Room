@@ -1,94 +1,62 @@
 package com.example.room
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.room.databinding.ActivityMainBinding
 import com.module.databasemanager.AppDatabase
 import com.module.databasemanager.Memo
 import com.module.databasemanager.MemoViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val memoViewModel: MemoViewModel by viewModels()
-//    private lateinit var memoAdapter: MemoAdapter
-//    private lateinit var db: _AppDatabase
-//    private val viewModel: _MemoViewModel by viewModels()
+    private lateinit var memoAdapter: MemoAdapter
 
     private lateinit var appDatabase: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        //binding.mainActivity = this
-
         appDatabase = AppDatabase.getInstance(applicationContext)!!
 
-//        try {
-//            db = _AppDatabase.getInstance(this)!!
-//            memoAdapter = MemoAdapter(this)
-//            memoAdapter.memoDao = db.memoDao()
-//            binding.recyclerView.adapter = memoAdapter
-//            binding.recyclerView.layoutManager = LinearLayoutManager(this)
-//
-//            viewModel.getDbData(this)
-//            viewModel.memoList.observe(this) {
-//                memoAdapter.submitList(it)
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
+        try {
+            appDatabase = AppDatabase.getInstance(this)!!
+            memoAdapter = MemoAdapter(this)
+            memoAdapter.memoDao = appDatabase.memoDao()
+            binding.recyclerView.adapter = memoAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(this)
+            memoViewModel.getDbData(this)
+            memoViewModel.memoList.observe(this) {
+                memoAdapter.submitList(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun onInsert(v: View) {
-        Log.d("testLog", "onInsert: aaaaaa")
-
-        Log.d("testLog", "memoViewModel.memoList: ${memoViewModel.memoList.value}")
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val memo = Memo(
-//                id =111,
-//                content =  "asdfasdf"
-//            )
-//            appDatabase.memoDao().insert(memo)
-//        }
-
-//        if (binding.editMemo.text.isNotEmpty()) {
-//            try {
-//                viewModel.insertData(
-//                    this,
-//                    memo = _Memo(
-//                        id = System.currentTimeMillis().apply {
-//                            val sdf = SimpleDateFormat("yyMMddhhmm")
-//                            sdf.format(this)
-//                        },
-//                        content = binding.editMemo.text.toString(),
-//                        datetime = System.currentTimeMillis()
-//                    ))
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-    }
-
-    fun onGetData(v: View) {
-        Log.d("testLog", "onInsert: bbbbb")
-
-//        CoroutineScope(Dispatchers.IO).launch {
-////            val memo = Memo(111)
-////            appDatabase.memoDao().insert(memo)
-//            appDatabase.memoDao().getAll().let {
-//                Log.d("testLog", "onGetData: $it")
-//            }
-
-        memoViewModel.getDbData(applicationContext)
-
-
+        if (binding.editMemo.text.isNotEmpty()) {
+            try {
+                memoViewModel.insertData(
+                    context = applicationContext,
+                    memo = Memo(
+                        id = System.currentTimeMillis().apply {
+                            val sdf = SimpleDateFormat("yyMMddhhmm")
+                            sdf.format(this)
+                        },
+                        content = binding.editMemo.text.toString(),
+                        datetime = System.currentTimeMillis()
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
+}
 
