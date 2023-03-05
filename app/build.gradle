@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-
 }
 
 android {
@@ -59,5 +58,4 @@ dependencies {
     //fragment ktx
     implementation 'androidx.fragment:fragment-ktx:1.5.3'
     implementation project(':DatabaseManager')
-
 }

@@ -1,6 +1,7 @@
 package com.example.room
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import com.module.databasemanager.data.Memo
 import com.module.databasemanager.ui.MemoViewModel
 import java.text.SimpleDateFormat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     private lateinit var binding: ActivityMainBinding
     private val memoViewModel: MemoViewModel by viewModels()
     private lateinit var memoAdapter: MemoAdapter
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             appDatabase = AppDatabase.getInstance(this)!!
-            memoAdapter = MemoAdapter(this)
+            memoAdapter = MemoAdapter(this@MainActivity, this)
             memoAdapter.memoDao = appDatabase.memoDao()
             binding.recyclerView.adapter = memoAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -46,8 +47,8 @@ class MainActivity : AppCompatActivity() {
                     context = applicationContext,
                     memo = Memo(
                         id = System.currentTimeMillis().apply {
-                            val sdf = SimpleDateFormat("yyMMddhhmm")
-                            sdf.format(this)
+                            val simpleDateFormat = SimpleDateFormat("yyMMddhhmm")
+                            simpleDateFormat.format(this)
                         },
                         content = binding.editMemo.text.toString(),
                         datetime = System.currentTimeMillis()
@@ -57,6 +58,14 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onLongClickEvent(item: Memo) {
+        Log.d("testLog", "onLongClickEvent : $item")
+    }
+
+    override fun onShortClickEvent(item: Memo) {
+        Log.d("testLog", "onShortClickEvent : $item")
     }
 }
 
