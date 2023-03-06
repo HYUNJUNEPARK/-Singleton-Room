@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
 
         initAdapter()
 
-        memoViewModel.getDbData()
+        memoViewModel.getAllItems()
         memoViewModel.memoList.observe(this) {
             memoAdapter.submitList(it)
         }
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
 
     fun insertItem(v: View) {
         if (binding.editMemo.text.isNotEmpty()) {
-            memoViewModel.insertData(
+            memoViewModel.addItem(
                 memo = Memo(
                     id = System.currentTimeMillis(),
                     content = binding.editMemo.text.toString(),
@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     }
 
     override fun onModifyButtonShortClickEvent(newItem: Memo) {
-        memoViewModel.updateData(newItem)
+        memoViewModel.updateItem(newItem)
     }
 
     override fun onDeleteButtonShortClickEvent(item: Memo) {
-        memoViewModel.deleteData( item)
+        memoViewModel.deleteItem( item)
     }
 
     private fun initAdapter() {
