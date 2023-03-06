@@ -14,5 +14,5 @@ data class Memo(
     var content: String,
 
     @ColumnInfo(name = "date")
-    var datetime: Long
+    var dateTime: Long
 )
