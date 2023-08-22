@@ -12,9 +12,9 @@ import com.example.room.db.Memo
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MemoAdapter(val listener: ClickEventListener?): ListAdapter<Memo, MemoAdapter.ViewHolder>(
-    diffUtil
-) {
+class MemoAdapter(
+    val listener: ClickEventListener?
+): ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
 
     interface ClickEventListener {
         fun onModifyButtonLongClickEvent(item: Memo)

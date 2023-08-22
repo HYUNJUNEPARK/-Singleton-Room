@@ -7,12 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.room.adapter.MemoAdapter
 import com.example.room.databinding.ActivityMainBinding
+import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
 import com.example.room.vm.MemoViewModel
 
 class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     private lateinit var binding: ActivityMainBinding
-    private val memoViewModel: MemoViewModel by viewModels()
+
+    private val memoViewModel: MemoViewModel by viewModels {
+        MemoViewModel.provideFactory(AppDatabase.getInstance(applicationContext))
+    }
+
     private val memoAdapter: MemoAdapter by lazy {
         MemoAdapter(this@MainActivity)
     }

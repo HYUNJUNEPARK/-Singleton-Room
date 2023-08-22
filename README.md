@@ -139,12 +139,15 @@ object MigrateDatabase {
 
 ><a id = "ref">**참고링크**</a></br>
 
-Room build version</br>
+-Room build version</br>
 https://developer.android.com/jetpack/androidx/releases/room</br>
 
-Migration 클래스</br>
+-Migration 클래스</br>
 https://developer.android.com/training/data-storage/room/migrating-db-versions?hl=ko</br>
 
-
-Room Database 튜토리얼 + MVVM + Repository(with kotlin)
+-Room Database 튜토리얼 + MVVM + Repository(with kotlin)
 https://thkim-study.tistory.com/15
+
+-Create ViewModels with dependencies(viewModel Factory 참고 코드)
+https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-factories
+
