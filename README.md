@@ -1,6 +1,6 @@
 # Room + Singleton + Coroutine + ViewModel
 
-<img src="https://github.com/HYUNJUNEPARK/ImageRepository/blob/master/androidProgramming/SQLite.jpg" height="400"/>
+<img src="app/src/ref/CoverImg.jpeg" height="400"/>
 
 ---
 1. <a href = "#content1">Room</a></br>
