@@ -1,9 +1,9 @@
-package com.module.databasemanager.data
+package com.example.room.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.module.databasemanager.data.AppDatabase.Companion.DB_NAME
+import com.example.room.db.AppDatabase.Companion.DB_NAME
 
 @Entity(tableName = DB_NAME)
 data class Memo(

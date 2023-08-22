@@ -1,7 +1,7 @@
-package com.module.databasemanager.data
+package com.example.room.db
 
 import androidx.room.*
-import com.module.databasemanager.data.AppDatabase.Companion.DB_NAME
+import com.example.room.db.AppDatabase.Companion.DB_NAME
 
 @Dao
 interface MemoDao {

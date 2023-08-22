@@ -1,4 +1,4 @@
-package com.example.room
+package com.example.room.adapter
 
 import android.content.Context
 import android.graphics.Color
@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
-import com.module.databasemanager.data.Memo
+import com.example.room.db.Memo
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MemoAdapter(private val context: Context, val listener: ClickEventListener?): ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
+class MemoAdapter(val listener: ClickEventListener?): ListAdapter<Memo, MemoAdapter.ViewHolder>(
+    diffUtil
+) {
 
     interface ClickEventListener {
         fun onModifyButtonLongClickEvent(item: Memo)

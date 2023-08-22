@@ -1,15 +1,15 @@
 package com.example.room
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.room.adapter.MemoAdapter
 import com.example.room.databinding.ActivityMainBinding
-import com.module.databasemanager.data.Memo
-import com.module.databasemanager.ui.MemoViewModel
+import com.example.room.db.Memo
+import com.example.room.vm.MemoViewModel
 
 class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     private lateinit var binding: ActivityMainBinding
@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.mainActivity = this@MainActivity
 
         initAdapter()
 
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
         }
     }
 
-    fun insertItem(v: View) {
+    fun insertItem() {
         if (binding.editMemo.text.isNotEmpty()) {
             memoViewModel.addItem(
                 memo = Memo(
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
     }
 
     private fun initAdapter() {
-        memoAdapter = MemoAdapter(this@MainActivity, this)
+        memoAdapter = MemoAdapter(this@MainActivity)
         binding.recyclerView.adapter = memoAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
     }

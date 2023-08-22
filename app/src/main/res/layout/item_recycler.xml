@@ -5,7 +5,7 @@
     <data>
 <!--        <variable-->
 <!--            name="recyclerViewItem"-->
-<!--            type="com.example.room.MemoAdapter" />-->
+<!--            type="com.example.room.adapter.MemoAdapter" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

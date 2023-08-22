@@ -57,5 +57,4 @@ dependencies {
 
     //fragment ktx
     implementation 'androidx.fragment:fragment-ktx:1.5.3'
-    implementation project(':DatabaseManager')
 }
