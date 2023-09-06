@@ -85,13 +85,13 @@ class ListAdapterEx(
                 Log.d(TAG, "==============================")
                 Log.d(TAG, "클릭 이벤트 전 데이터:\n$currentList \n클릭된 아이템:$item")
 
-                val show = toggleLayout(
+                val isExpanded = toggleLayout(
                     isExpanded = item.isExpanded,
                     eventTriggerView = view,
                     targetExpandView = binding.foldableTextView
                 )
 
-                item.isExpanded = show
+                item.isExpanded = isExpanded
 
                 Log.d(TAG, "클릭 이벤트 후 데이터:\n$currentList \n클릭된 아이템:$item")
                 Log.d(TAG, "==============================")
@@ -113,9 +113,9 @@ class ListAdapterEx(
             RotateExpandAnimation.rotateArrow(eventTriggerView, isExpanded) //화살표를 회전 시킨다.
 
             if (isExpanded) { //펼쳐진 상태
-                RotateExpandAnimation.collapse(targetExpandView)
+                RotateExpandAnimation.collapse(targetExpandView) //뷰를 접는다.
             } else { //접힌 상태
-                RotateExpandAnimation.expand(targetExpandView)
+                RotateExpandAnimation.expand(targetExpandView) //뷰를 펼친다.
             }
 
             return !isExpanded

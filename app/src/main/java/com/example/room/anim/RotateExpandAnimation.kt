@@ -1,9 +1,11 @@
 package com.example.room.anim
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import com.example.room.MainActivity.Companion.TAG
 
 class RotateExpandAnimation {
     companion object {
@@ -35,7 +37,7 @@ class RotateExpandAnimation {
 
             val animation = object : Animation() {
                 override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-                    view.layoutParams.height = if (interpolatedTime == 1f) {
+                    view.layoutParams.height = if (interpolatedTime == 1f) { //애니메이션 동작이 끝나면 interpolatedTime == 1f
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     } else {
                         (actualHeight*interpolatedTime).toInt()
@@ -56,16 +58,19 @@ class RotateExpandAnimation {
 
             val animation = object : Animation() {
                 override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-                    if (interpolatedTime == 1f) {
+                    if (interpolatedTime == 1f) { //애니메이션 동작이 끝나면 interpolatedTime == 1f
                         view.visibility = View.GONE
                     } else {
-                        view.layoutParams.height = (actualHeight - (actualHeight * interpolatedTime)).toInt()
+                        view.layoutParams.height = (actualHeight - (actualHeight * interpolatedTime)).toInt() //뷰의 높이가 점진적으로 줄어든다.
                         view.requestLayout()
                     }
                 }
             }
 
             animation.duration = (actualHeight / view.context.resources.displayMetrics.density).toLong()
+
+            Log.d(TAG, "collapse:뷰가 사라지는 시간(ms):${animation.duration}") //ex.388ms
+
             view.startAnimation(animation)
         }
     }
