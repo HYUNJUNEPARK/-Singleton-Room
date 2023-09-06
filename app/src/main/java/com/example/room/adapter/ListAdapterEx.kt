@@ -9,18 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.room.databinding.ItemRecyclerBinding
 import com.example.room.db.Memo
+import com.example.room.callback.ClickListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MemoAdapter(
-    val listener: ClickEventListener?
-): ListAdapter<Memo, MemoAdapter.ViewHolder>(diffUtil) {
-
-    interface ClickEventListener {
-        fun onModifyButtonLongClickEvent(item: Memo)
-        fun onModifyButtonShortClickEvent(newItem: Memo)
-        fun onDeleteButtonShortClickEvent(item: Memo)
-    }
+class ListAdapterEx(
+    val itemClickListener: ClickListener.ClickEventListener?
+): ListAdapter<Memo, ListAdapterEx.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -34,14 +29,18 @@ class MemoAdapter(
     inner class ViewHolder(private val binding: ItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Memo) {
             binding.textIdx.text = "${item.id}"
+
             binding.textContent.text = item.content
+
             val dateFormat = SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.KOREA)
             binding.textDatetime.text = dateFormat.format(item.dateTime)
 
+            //삭제 버튼
             binding.deleteButton.setOnClickListener {
-                listener?.onDeleteButtonShortClickEvent(item)
+                itemClickListener?.onDeleteClicked(item)
             }
 
+            //수정, 저장 버튼
             binding.modifyButton.setOnClickListener {
                 if(binding.modifyButton.text == "수정") {
                     binding.textEditor.visibility = View.VISIBLE
@@ -59,14 +58,16 @@ class MemoAdapter(
                         dateTime = System.currentTimeMillis()
                     )
 
-                    listener?.onModifyButtonShortClickEvent(newItem)
+                    itemClickListener?.onModifyShortClicked(newItem)
                 }
             }
 
+
             binding.modifyButton.setOnLongClickListener {
-                listener?.onModifyButtonLongClickEvent(item)
+                itemClickListener?.onModifyLongClicked(item)
                 return@setOnLongClickListener true
             }
+
         }
     }
 

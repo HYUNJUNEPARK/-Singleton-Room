@@ -5,21 +5,35 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.example.room.adapter.MemoAdapter
+import com.example.room.adapter.ListAdapterEx
 import com.example.room.databinding.ActivityMainBinding
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
-import com.example.room.vm.MemoViewModel
+import com.example.room.callback.ClickListener
+import com.example.room.vm.ViewModelEx
 
-class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val memoViewModel: MemoViewModel by viewModels {
-        MemoViewModel.provideFactory(AppDatabase.getInstance(applicationContext))
+    private val viewModelEx: ViewModelEx by viewModels {
+        ViewModelEx.provideFactory(AppDatabase.getInstance(applicationContext))
     }
 
-    private val memoAdapter: MemoAdapter by lazy {
-        MemoAdapter(this@MainActivity)
+    //리스트 어댑터 + 클릭 콜백
+    private val listAdapterEx: ListAdapterEx by lazy {
+        ListAdapterEx(itemClickListener = object : ClickListener.ClickEventListener{
+            //수정 버튼 롱클릭
+            override fun onModifyLongClicked(item: Memo) {
+                Toast.makeText(this@MainActivity, "onLongClickEvent", Toast.LENGTH_SHORT).show()
+            }
+            //수정 버튼 숏클릭
+            override fun onModifyShortClicked(newItem: Memo) {
+                viewModelEx.updateItem(newItem)
+            }
+            override fun onDeleteClicked(item: Memo) {
+                viewModelEx.deleteItem( item)
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,17 +41,17 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.mainActivity = this@MainActivity
 
-        binding.recyclerView.adapter = memoAdapter
+        binding.recyclerView.adapter = listAdapterEx
 
-        memoViewModel.getAllItems()
-        memoViewModel.memoList.observe(this) {
-            memoAdapter.submitList(it)
+        viewModelEx.memoList.observe(this@MainActivity) { data ->
+            listAdapterEx.submitList(data)
         }
     }
 
-    fun insertItem() {
+    //저장 버튼
+    fun onSaveButtonClicked() {
         if (binding.editMemo.text.isNotEmpty()) {
-            memoViewModel.addItem(
+            viewModelEx.addItem(
                 memo = Memo(
                     id = System.currentTimeMillis(),
                     content = binding.editMemo.text.toString(),
@@ -47,16 +61,8 @@ class MainActivity : AppCompatActivity(), MemoAdapter.ClickEventListener {
         }
     }
 
-    override fun onModifyButtonLongClickEvent(item: Memo) {
-        Toast.makeText(this, "onLongClickEvent", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onModifyButtonShortClickEvent(newItem: Memo) {
-        memoViewModel.updateItem(newItem)
-    }
-
-    override fun onDeleteButtonShortClickEvent(item: Memo) {
-        memoViewModel.deleteItem( item)
+    companion object {
+        const val TAG = "testLog"
     }
 }
 

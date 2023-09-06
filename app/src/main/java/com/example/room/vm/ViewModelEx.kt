@@ -1,37 +1,31 @@
 package com.example.room.vm
 
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.room.MainActivity.Companion.TAG
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MemoViewModel(
+class ViewModelEx(
     private val appDatabase: AppDatabase
 ) : ViewModel() {
+
     private val _memoList = MutableLiveData<List<Memo>>()
     val memoList: LiveData<List<Memo>> get() = _memoList
 
-    /**
-     * DB 에 아이템을 저장한다.
-     *
-     * @param memo 저장하려는 아이템
-     */
-    fun addItem(memo: Memo) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            appDatabase.memoDao().insert(memo)
+    init {
+        Log.d(TAG, "ViewModelEx Init")
 
-            getAllItems() //데이터 동기화
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        if (memoList.value == null) getAllItems()
     }
 
     /**
      * DB 에 저장된 모든 데이터를 가져와, LiveData(memoList) 를 초기화한다.
      */
-    fun getAllItems() = CoroutineScope(Dispatchers.IO).launch {
+    private fun getAllItems() = CoroutineScope(Dispatchers.IO).launch {
         try {
             appDatabase.memoDao().getAll().let { itemList ->
                 _memoList.postValue(itemList)
@@ -41,6 +35,19 @@ class MemoViewModel(
         }
     }
 
+    /**
+     * DB 에 아이템을 저장한다.
+     *
+     * @param memo 저장하려는 아이템
+     */
+    fun addItem(memo: Memo) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            appDatabase.memoDao().insert(memo)
+            getAllItems() //데이터 동기화
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     /**
      * DB 에 저장된 특정 아이템을 수정한다.
@@ -50,7 +57,6 @@ class MemoViewModel(
     fun updateItem(newMemo: Memo) = CoroutineScope(Dispatchers.IO).launch {
         try {
             appDatabase.memoDao().update(newMemo)
-
             getAllItems() //데이터 동기화
         } catch (e: Exception) {
             e.printStackTrace()
@@ -66,7 +72,6 @@ class MemoViewModel(
     fun deleteItem(memo: Memo) = CoroutineScope(Dispatchers.IO).launch {
         try {
             appDatabase.memoDao().delete(memo)
-
             getAllItems() //데이터 동기화
         } catch (e: Exception) {
             e.printStackTrace()
@@ -78,7 +83,7 @@ class MemoViewModel(
             object : AbstractSavedStateViewModelFactory() {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
-                    return MemoViewModel(appDatabase) as T
+                    return ViewModelEx(appDatabase) as T
                 }
         }
     }
