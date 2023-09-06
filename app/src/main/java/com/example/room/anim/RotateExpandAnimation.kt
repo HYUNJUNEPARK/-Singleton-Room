@@ -31,6 +31,7 @@ class RotateExpandAnimation {
             )
 
             val actualHeight = view.measuredHeight
+            Log.d(TAG, "expandAction: actualHeight $actualHeight")
 
             view.layoutParams.height = 0
             view.visibility = View.VISIBLE
@@ -55,6 +56,7 @@ class RotateExpandAnimation {
 
         fun collapse(view: View) {
             val actualHeight = view.measuredHeight
+            Log.d(TAG, "collapse: actualHeight $actualHeight")
 
             val animation = object : Animation() {
                 override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
@@ -68,8 +70,6 @@ class RotateExpandAnimation {
             }
 
             animation.duration = (actualHeight / view.context.resources.displayMetrics.density).toLong()
-
-            Log.d(TAG, "collapse:뷰가 사라지는 시간(ms):${animation.duration}") //ex.388ms
 
             view.startAnimation(animation)
         }
