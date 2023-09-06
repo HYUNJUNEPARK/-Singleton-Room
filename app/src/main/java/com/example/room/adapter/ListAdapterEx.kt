@@ -68,6 +68,10 @@ class ListAdapterEx(
                 return@setOnLongClickListener true
             }
 
+            binding.foldButton.setOnClickListener {
+                binding.foldableTextView.visibility = View.VISIBLE
+            }
+
         }
     }
 
