@@ -1,8 +1,6 @@
 package com.example.room.vm
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.room.MainActivity.Companion.TAG
 import com.example.room.db.AppDatabase
 import com.example.room.db.Memo
 import kotlinx.coroutines.CoroutineScope
@@ -17,8 +15,6 @@ class ViewModelEx(
     val memoList: LiveData<List<Memo>> get() = _memoList
 
     init {
-        Log.d(TAG, "ViewModelEx Init")
-
         if (memoList.value == null) getAllItems()
     }
 
