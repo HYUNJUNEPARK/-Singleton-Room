@@ -51,7 +51,7 @@
                 android:id="@+id/foldButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_up_24_black"
+                android:src="@drawable/ic_arrow_down_24_black"
                 app:layout_constraintBottom_toBottomOf="@id/textDatetime"
                 app:layout_constraintStart_toEndOf="@id/textDatetime"
                 app:layout_constraintTop_toTopOf="@id/textDatetime" />

@@ -79,13 +79,11 @@ class ListAdapterEx(
                 return@setOnLongClickListener true
             }
 
-
-
             binding.foldButton.setOnClickListener { view ->
                 Log.d(TAG, "==============================")
                 Log.d(TAG, "클릭 이벤트 전 데이터:\n$currentList \n클릭된 아이템:$item")
 
-                val isExpanded = toggleLayout(
+                val isExpanded = rotateExpandView(
                     isExpanded = item.isExpanded,
                     eventTriggerView = view,
                     targetExpandView = binding.foldableTextView
@@ -105,20 +103,18 @@ class ListAdapterEx(
          *
          * @return 파라미터로 받은 isExpanded 속성을 반대로 바꿔 반환한다.
          */
-        private fun toggleLayout(
+        private fun rotateExpandView(
             isExpanded: Boolean,
             eventTriggerView: View,
             targetExpandView: TextView,
         ): Boolean {
-            RotateExpandAnimation.rotateArrow(eventTriggerView, isExpanded) //화살표를 회전 시킨다.
-
             if (isExpanded) { //펼쳐진 상태
                 RotateExpandAnimation.collapse(targetExpandView) //뷰를 접는다.
             } else { //접힌 상태
                 RotateExpandAnimation.expand(targetExpandView) //뷰를 펼친다.
             }
 
-            return !isExpanded
+            return RotateExpandAnimation.rotateArrow(eventTriggerView, isExpanded) //화살표를 회전 시키고, 파라미터로 전달받은 isExpanded 의 반대값을 리턴
         }
     }
 
