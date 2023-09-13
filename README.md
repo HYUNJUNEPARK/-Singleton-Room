@@ -50,7 +50,7 @@ RecyclerView 퍼포먼스 향상시키기</br>
 
 `RecyclerView.setHasFixedSize(true)`: Adapter 내용이 변경될 때 RecyclerView가 전체 레이아웃을 갱신하지 않도록 할 수 있다.
 
-<img src="app/src/ref/ex1.png" height="400"/>
+<img src="app/src/ref/ex1.png" height="200"/>
 
 <br></br>
 
@@ -71,7 +71,7 @@ RecyclerView 퍼포먼스 향상시키기</br>
 `RecyclerView.setRecycledViewPool(RecyclerViewPool)`: 리사이클러뷰간 view pool을 공유하여 성능을 개선한다.
 
 <img src="app/src/ref/ex3_1.png" height="400"/>
-<img src="app/src/ref/ex3_2.png" height="400"/>
+<img src="app/src/ref/ex3_2.png" height="200"/>
 
 <br></br>
 
@@ -81,7 +81,7 @@ RecyclerView 퍼포먼스 향상시키기</br>
 
 `Adapter.setHasStableIds(true)`: 아이템에 대해 고유 식별자를 부여하여 동일한 아이템에 대해 onBindViewHolder 호출을 방지하여 성능을 개선한다.
 
-<img src="app/src/ref/ex4.png" height="400"/>
+<img src="app/src/ref/ex4.png" height="200"/>
 
 <br></br>
 
