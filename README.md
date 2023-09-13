@@ -79,7 +79,7 @@ RecyclerView 퍼포먼스 향상시키기</br>
 
 ><a id = "content6">**6. setHasStableIds(true) 호출하기**</a></br>
 
-`Adapter.setHasStableIds(tru)`: 아이템에 대해 고유 식별자를 부여하여 동일한 아이템에 대해 onBindViewHolder 호출을 방지하여 성능을 개선한다.
+`Adapter.setHasStableIds(true)`: 아이템에 대해 고유 식별자를 부여하여 동일한 아이템에 대해 onBindViewHolder 호출을 방지하여 성능을 개선한다.
 
 <img src="app/src/ref/ex4.png" height="400"/>
 

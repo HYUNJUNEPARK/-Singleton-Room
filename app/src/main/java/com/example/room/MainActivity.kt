@@ -43,7 +43,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.mainActivity = this@MainActivity
 
-        binding.recyclerView.adapter = listAdapterEx
+        binding.recyclerView.apply {
+            adapter = listAdapterEx
+            setHasFixedSize(true)
+        }
 
         viewModelEx.memoList.observe(this@MainActivity) { localDataList ->
             Log.d(TAG, "==============================")
