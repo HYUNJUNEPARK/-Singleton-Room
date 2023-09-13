@@ -3,138 +3,90 @@
 <img src="app/src/ref/CoverImg.jpeg" height="400"/>
 
 ---
-1. <a href = "#content1">Room</a></br>
-2. <a href = "#content2">Room 구성요소</a></br>
--Database</br>
--Dao</br>
--Entity</br>
-3. <a href = "#content3">Migration</a></br>
+RecyclerView 퍼포먼스 향상시키기</br>
+
+1. <a href = "#content1">아이템 갱신 최소화하기</a></br>
+2. <a href = "#content2">DiffUtil 사용하기</a></br>
+3. <a href = "#content3">setHasFixedSize(true) 호출하기</a></br>
+4. <a href = "#content4">setItemViewCacheSize(int) 호출하기</a></br>
+5. <a href = "#content5">setRecycledViewPool(RecyclerViewPool) 호출하기</a></br>
+6. <a href = "#content6">setHasStableIds(true) 호출하기</a></br>
+
 * <a href = "#ref">참고링크</a>
 ---
-><a id = "content1">**1. Room**</a></br>
 
-```kotlin
-private lateinit var db: MemoDatabase
-//...
-db = DBProvider.getInstance(this)!!
-```
+><a id = "content1">**1. 아이템 갱신 최소화하기**</a></br>
 
--ORM(Object Relational Mapping) 라이브러리 : 객체(class)와 RDB 를 매핑하고 변환하는 기술</br>
--SQLite 에서는 쿼리문을 알아야했던것과 달리 ORM 라이브러리인 Room 을 사용하면 쿼리를 몰라도 코드만으로 DB 컨트롤 가능</br>
--클래스 파일에 ORM 을 적용하면 자동으로 쿼리로 변환해 테이블을 생성</br>
--어노테이션 프로세싱(Annotation Processing API) :</br>
-클래스명, 변수명 위에 '@명령어' 를 사용하는 것으로 명령어가 컴파일 시 코드로 생성되기 때문에 실행 시 발생할 수 있는 성능 문제가 많이 개선됨</br>
+`Adapter.notifyDataSetChanged()`를 사용하여 전체를 갱신하는 대신 특정 아이템만 갱신하도록 한다.</br>
 
-```
-//build
-plugin {
-    id 'kotlin-kapt' //어노테이션 프로세싱을 코틀린에서 사용 가능하게 해줌
-}
-
-dependencies {
-    //Room
-    def roomVersion = "2.4.2"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
-    
-     //Coroutine
-     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
-     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
-}
-```
-<br></br>
-<br></br>
-
-><a id = "content2">**2. Room 구성요소**</a></br>
-
-
-**(1)RoomHelper**</br>
--RoomDatabase() 를 상속받는 추상 클래스로 Dao 를 상속받는 추상 메서드가 내부에 있음</br>
-`abstract fun myDao(): MyDao`</br>
--Entity, Dao 의 정보가 모여 있는 껍데기 클래스로 최종적으로 Room 에 만들어져 있는 코드를 사용할 수 있음</br>
--entities : Room 라이브러리가 사용할 테이블 클래스 목록</br>
-`entities = arrayOf(Entity::class)` or `entities = [Entity::class]`</br>
--version : DB 버전</br>
--exportSchema : true -> 스키마 정보를 파일로 출력</br>
-
-```kotlin
-@Database(entities = [MyEntity::class], version = 1, exportSchema = false)
-abstract class MyRoomHelper: RoomDatabase() {
-    abstract fun myDao(): MyDao
-}
-```
-<br></br>
-**(2)Dao**</br>
--데이터베이스에 엑세스하는데 사용되는 메소드(select, inset, delete, join 등)를 갖고 있음</br>
--@RoomDao : DAO 라는 것을 명시(Data Access Object)</br>
--@Query : 쿼리를 직접 작성하고 실행</br>
--@Insert, @Delete</br>
-
-```kotlin
-@Dao
-interface MyDao {
-    @Query("SELECT * FROM room_table")
-    fun getAll(): List<MyEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(table: MyEntity)
-
-    @Delete
-    fun delete(table: MyEntity)
-}
-```
-<br></br>
-**(3)Entity**</br>
--DB 테이블의 정보를 담고 있는 클래스</br>
--@Entity(tableName = "") : 해당 어노테이션이 적용된 클래스를 찾아 테이블로 변환</br>
--@ColumnInfo(name = "") : 컬럼에 대한 정보를 담고 있는 변수위에 사용됨</br>
--@Ignore : 해당 변수가 테이블과 관계없는 변수라는 것을 나타냄</br>
--@PrimaryKey(autoGenerate = true)</br>
-
-```kotlin
-@Entity(tableName = "room_table")
-class MyEntity {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo
-    var no: Long? = null
-
-    @ColumnInfo
-    var content: String = ""
-
-    @ColumnInfo(name = "date")
-    var datetime: Long = 0
-
-    constructor(content: String, datetime: Long) {
-        this.content = content
-        this.datetime = datetime
-    }
-}
-```
-
+부분적으로 아이템을 갱신하는 메서드</br>
+.notifyItemChanged</br>
+.notifyItemInserted</br>
+.notifyItemRemoved</br>
+.notifyItemMoved</br>
+.notifyItemRangeChanged</br>
+.notifyItemRangeInserted</br>
+.notifyItemRangeRemoved</br>
 
 <br></br>
-<br></br>
 
-><a id = "content3">**3. Migration**</a></br>
 
--DB 수정 클래스</br>
--앱 업데이트로 DB 테이블을 변경될 때 기기 내 이미 있는 DB 데이터는 유지하는 것이 중요함</br>
--Room 라이브러리는 Migration 클래스를 지원해 유저의 데이터를 유지함</br>
 
-```kotlin
-object MigrateDatabase {
-    val MIGRATE_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            val alter = "ALTER table room_table add column new_title text"
-            database.execSQL(alter)
-        }
-    }
-}
-```
+><a id = "content2">**2. DiffUtil 사용하기**</a></br>
+
+`DiffUtil` : 두 리스트의 차이를 계산하고 변경된 부분만 갱신하도록 도와주는 유틸클래스</br>
+
+반드시 구현해야하는 DiffUtil.Callback 메소드</br>
+.getOldListSize: 이전 리스트의 사이즈를 반환</br>
+.getNewListSIze: 새로운 리스트의 사이즈를 반환</br>
+.areItemsTheSame: 두 아이템이 같은지 검사한다.</br>
+.areContentsTheSame: 두 아이템의 내용이 같은지 검사한다.</br>
 
 <br></br>
+
+
+
+><a id = "content3">**3. setHasFixedSize(true) 호출하기**</a></br>
+
+`RecyclerView.setHasFixedSize(true)`: Adapter 내용이 변경될 때 RecyclerView가 전체 레이아웃을 갱신하지 않도록 할 수 있다.
+
+<img src="app/src/ref/ex1.png" height="400"/>
+
 <br></br>
+
+
+
+><a id = "content4">**4. setItemViewCacheSize(int) 호출하기**</a></br>
+
+`RecyclerView.setItemViewCacheSize(int n)`: 아이템 뷰가 Pool 로 들어가기 전에 유지되는 캐시의 사이즈를 결정한다.
+
+<img src="app/src/ref/ex2.png" height="400"/>
+
+<br></br>
+
+
+
+><a id = "content5">**5. setRecycledViewPool(RecyclerViewPool) 호출하기**</a></br>
+
+`RecyclerView.setRecycledViewPool(RecyclerViewPool)`: 리사이클러뷰간 view pool을 공유하여 성능을 개선한다.
+
+<img src="app/src/ref/ex3_1.png" height="400"/>
+<img src="app/src/ref/ex3_2.png" height="400"/>
+
+<br></br>
+
+
+
+><a id = "content6">**6. setHasStableIds(true) 호출하기**</a></br>
+
+`Adapter.setHasStableIds(tru)`: 아이템에 대해 고유 식별자를 부여하여 동일한 아이템에 대해 onBindViewHolder 호출을 방지하여 성능을 개선한다.
+
+<img src="app/src/ref/ex4.png" height="400"/>
+
+<br></br>
+
+
+
 ---
 
 ><a id = "ref">**참고링크**</a></br>
@@ -145,9 +97,13 @@ https://developer.android.com/jetpack/androidx/releases/room</br>
 -Migration 클래스</br>
 https://developer.android.com/training/data-storage/room/migrating-db-versions?hl=ko</br>
 
--Room Database 튜토리얼 + MVVM + Repository(with kotlin)
+-Room Database 튜토리얼 + MVVM + Repository(with kotlin)</br>
 https://thkim-study.tistory.com/15
 
--Create ViewModels with dependencies(viewModel Factory 참고 코드)
+-Create ViewModels with dependencies(viewModel Factory 참고 코드)</br>
 https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-factories
+
+-안드로이드 Expandable RecyclerView 만들기</br>
+https://android-dev.tistory.com/59
+
 
