@@ -8,96 +8,130 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textIdx"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="01"
-                android:textColor="@color/teal_200"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@id/textContent"
-                app:layout_constraintStart_toStartOf="@id/textContent" />
-
-            <TextView
-                android:id="@+id/textContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="86dp"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:text="Sample Text"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textDatetime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2020/01/01 00:00"
-                android:layout_marginEnd="30dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/modifyButton" />
-
-            <ImageView
-                android:id="@+id/foldButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_down_24_black"
-                app:layout_constraintBottom_toBottomOf="@id/textDatetime"
-                app:layout_constraintStart_toEndOf="@id/textDatetime"
-                app:layout_constraintTop_toTopOf="@id/textDatetime" />
-
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="삭제"
-                android:layout_marginEnd="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/modifyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="수정"
-                app:layout_constraintStart_toStartOf="@id/deleteButton"
-                app:layout_constraintEnd_toEndOf="@id/deleteButton"
-                app:layout_constraintTop_toBottomOf="@id/deleteButton"/>
-
-            <EditText
-                android:id="@+id/textEditor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Text Editor"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.022"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.791"
-                tools:visibility="visible" />
-
-            <View
-                android:id="@+id/line"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/gray"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_height="match_parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/erase_item_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.3"
+                    android:background="#CCD4FF">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:src="@drawable/ic_delete"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/swipe_view"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textIdx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01"
+                    android:textColor="@color/teal_200"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@id/textContent"
+                    app:layout_constraintStart_toStartOf="@id/textContent" />
+
+                <TextView
+                    android:id="@+id/textContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="86dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Sample Text"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textDatetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2020/01/01 00:00"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/modifyButton" />
+
+                <ImageView
+                    android:id="@+id/foldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_down_24_black"
+                    app:layout_constraintBottom_toBottomOf="@id/textDatetime"
+                    app:layout_constraintStart_toEndOf="@id/textDatetime"
+                    app:layout_constraintTop_toTopOf="@id/textDatetime" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="삭제"
+                    android:layout_marginEnd="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/modifyButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="수정"
+                    app:layout_constraintStart_toStartOf="@id/deleteButton"
+                    app:layout_constraintEnd_toEndOf="@id/deleteButton"
+                    app:layout_constraintTop_toBottomOf="@id/deleteButton"/>
+
+                <EditText
+                    android:id="@+id/textEditor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text Editor"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.022"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.791"
+                    tools:visibility="visible" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
         <TextView
             android:padding="8dp"

@@ -106,4 +106,15 @@ https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-f
 -안드로이드 Expandable RecyclerView 만들기</br>
 https://android-dev.tistory.com/59
 
+-[Android] RecyclerView Item Swipe 구현하기 (with Kotlin)</br>
+https://velog.io/@jeongminji4490/Android-RecyclerView-Item-Swipe-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-with-Kotlin
+
+-RecyclerView 에서 item Swipe 하기 (feat. ItemTouchHelper, ItemTouchUIUtil)</br>
+https://velog.io/@nimok97/RecyclerView-%EC%97%90%EC%84%9C-item-Swipe-%ED%95%98%EA%B8%B0-feat.-ItemTouchHelper-ItemTouchUIUtil
+
+https://github.com/hanchang97/android_study/tree/master/selfStudy/Recyclerview/ItmTouchHelper2
+
+
+
+
 

@@ -5,5 +5,6 @@ data class MemoUiDto(
     val id: Long,
     val content: String,
     val dateTime: Long,
-    var isExpanded: Boolean = false //접힌 상태
+    var isExpanded: Boolean = false, //접힌 상태
+    var isClamped: Boolean = false, //스와이프 상태
 )

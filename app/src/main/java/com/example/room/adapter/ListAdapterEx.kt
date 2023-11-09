@@ -34,6 +34,15 @@ class ListAdapterEx(
     inner class ViewHolder(
         private val binding: ItemRecyclerBinding
     ): RecyclerView.ViewHolder(binding.root) {
+
+        fun setClamped(isClamped: Boolean){
+            getItem(adapterPosition).isClamped = isClamped
+        }
+
+        fun getClamped(): Boolean{
+            return getItem(adapterPosition).isClamped
+        }
+
         fun bind(item: MemoUiDto) {
             binding.textIdx.text = "${item.id}"
 
